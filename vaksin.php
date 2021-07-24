@@ -13,7 +13,7 @@
 
 		$vaksin = mysqli_query($conn,"insert into vaksin values('','$tempat','$tanggal','$kuota','$daftar');");
 			if($vaksin){
-				mysqli_query($conn,"update vaksin where id_pendaftaran");
+				mysqli_query($conn,"update vaksin where id_pendaftar");
 														
 															
 					echo "<meta http-equiv='refresh' content='1; URL=vaksin.php'> Berhasil ditambahkan";
@@ -128,6 +128,10 @@ https://templatemo.com/tm-547-real-dynamic
 											$vaksin=mysqli_query($conn,"SELECT * from vaksin");
 											
 											while($p=mysqli_fetch_array($vaksin)){
+                                                 $id_pendaftar = $p['id_pendaftar'];
+													$tanggal = $p['tanggal'];
+													$kuota = $p['kuota'];
+                                                    $daftar = $p['daftar'];
 
 												?>
 												
@@ -137,22 +141,78 @@ https://templatemo.com/tm-547-real-dynamic
 													<td><?php echo $p['tanggal'] ?></td>
 													<td><?php echo $p['kuota'] ?></td>
 													<td><?php echo $p['daftar'] ?></td>
-                                                    <td><form action="vaksin.php" method="post" enctype="multipart/form-data" >
-														<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-														  Action
-														</button>
-														<div class="dropdown-menu">
-														  <input type="button" class="dropdown-item" data-toggle="modal" data-target="#ubah<?php echo $id_login ?>" value="Edit" \>
-														  <input type="submit" class="dropdown-item" name="hapus" value="Delete" \>
-														</div>
-													</form>
+                                                    <td>
+													<button style="margin-bottom" data-toggle="modal" data-target="#ubah<?php echo $id_pendaftar ?>" class="btn btn-info"></span>Edit</button>	  
+													<button style="margin-bottom" class="btn btn-danger"  name="hapus"></span>Hapus</button>	  
 													</td>
 												</tr>
                                                 
-                                                
+                                                <div id="ubah<?php echo $id_pendaftar ?>" class="modal fade">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h4 class="modal-title">Edit Data Vaksin</h4>
+																		<p><?php echo $id_pendaftar;?></p>
+																	</div>
+																	<div class="modal-body">
+																		<form action="vaksin.php" method="post" enctype="multipart/form-data" >
+																			<div class="form-group">
+																				<label>Tempat</label>
+																				<input name="tempat" type="text" class="form-control" value="<?php echo $p['tempat'] ?>">
+																			</div>
+																			<div class="form-group">
+																				<label>Tanggal Pelaksanaan</label>
+																				<input name="tanggal" type="date" class="form-control" value="<?php echo $p['tanggal'] ?>">
+																			</div>
+																			<div class="form-group">
+																				<label>Kuota</label>
+																				<input name="kuota" type="text" class="form-control" value="<?php echo $p['kuota'] ?>">
+																			</div>
+                                                                            <div class="form-group">
+																				<label>Link Pendaftaran</label>
+																				<input name="daftar" type="text" class="form-control" value="<?php echo $p['daftar'] ?>">
+																			</div>
+
+																		</div>
+																		<div class="modal-footer">
+																			<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+																			<input type="submit" name="simpan" class="btn btn-primary" value="Simpan">
+																		</div>
+																	</form>
+																</div>
+															</div>
+														</div>
+
 
 												<?php 
 											}
+
+                                            if(isset($_POST["hapus"])){
+                                                $hapusin = mysqli_query($conn,"delete from vaksin where id_pendaftar='$id_pendaftar'");
+                                                if($hapusin){
+                                                    
+                                                    echo "<br><meta http-equiv='refresh' content='1; URL=vaksin.php'> Deleting";
+                                                } else {
+                                                    echo "<br><meta http-equiv='refresh' content='1; URL=vaksin.php'> Failed";	
+                                                }
+                                            };
+                                            
+
+                                            if(isset($_POST["simpan"])){
+                                            $edittempat = $_POST['tempat'];
+                                            $edittanggal = $_POST['tanggal'];
+                                            $editkuota = $_POST['kuota'];
+                                            $editdaftar = $_POST['daftar'];
+                                                $simpanin = mysqli_query($conn,"update vaksin set tempat='$edittempat', tanggal='$edittanggal', kuota='$editkuota', daftar='$editdaftar' where id_pendaftar='$id_pendaftar'");
+                                                if($simpanin){
+                                                    echo "<meta http-equiv='refresh' content='1; URL=vaksin.php'> Updating";
+                                                } else {
+                                                    echo "<meta http-equiv='refresh' content='1; URL=vaksin.php'> Failed";	
+                                                }
+                                            };
+                                        
+
+
 											?>
 										</tbody>
 										</table>
