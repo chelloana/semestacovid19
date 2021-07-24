@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -77,7 +79,47 @@ https://templatemo.com/tm-547-real-dynamic
             <section class="row tm-mb-1">
                 <div class="col-12 text-center mx-auto tm-about-box">
                     <h2 class="tm-text-primary tm-my-1 tm-mb-5 tm-intro-text">Vaksinasi</h2>
-                    <p>Morbi non tortor hendrerit, imperdiet sem suscipit, ultrices turpis. Nulla eleifend vestibulum eros id scelerisque. Aliquam fringilla in sem aliquam hendrerit. Maecenas congue euismod tortor, eget interdum purus imperdiet ac. Donec vestibulum dignissim nisl ac accumsan.</p>
+                    <button style="margin-bottom:20px" data-toggle="modal" data-target="#myModal" class="btn btn-info col-md-2"><span class="glyphicon glyphicon-plus"></span>Tambah</button>
+                    <table class="table table-bordered">
+											<tr>
+												<th>No</th>
+												<th>Tempat</th>
+												<th>Tanggal Pelaksanaan</th>
+												<th>Kuota</th>
+												<th>Link Pendaftaran</th>
+                                                <th>Action</th>
+
+												
+												<!--<th>Opsi</th>-->
+											</tr></thead><tbody>
+											<?php 
+                                            include 'koneksi.php';
+                                            $no=1;
+											$vaksin=mysqli_query($conn,"SELECT * from vaksin");
+											
+											while($p=mysqli_fetch_array($vaksin)){
+
+												?>
+												
+												<tr>
+													<td><?php echo $no++ ?></td>
+													<td><?php echo $p['tempat'] ?></td>
+													<td><?php echo $p['tanggal'] ?></td>
+													<td><?php echo $p['kuota'] ?></td>
+													<td><?php echo $p['daftar'] ?></td>
+                                                    <td>
+                                                        <a href="edit.php?id=<?php echo $d['id']; ?>">EDIT</a>
+                                                        <a href="hapus.php?id=<?php echo $d['id']; ?>">HAPUS</a>
+                                                    </td>
+												</tr>
+
+												<?php 
+											}
+											?>
+										</tbody>
+										</table>
+                                    
+                    
                 </div>
             </section>
 
