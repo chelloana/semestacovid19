@@ -1,4 +1,29 @@
+<?php 
+	session_start();
+	date_default_timezone_set("Asia/Bangkok");
 
+	include 'koneksi.php';
+	
+	if(isset($_POST["submit"])){
+
+		$tempat = $_POST['tempat'];
+		$tanggal = $_POST['tanggal'];
+		$kuota = $_POST['kuota'];
+        $daftar = $_POST['daftar'];
+
+		$vaksin = mysqli_query($conn,"insert into vaksin values('','$tempat','$tanggal','$kuota','$daftar');");
+			if($vaksin){
+				mysqli_query($conn,"update vaksin where id_pendaftaran");
+														
+															
+					echo "<meta http-equiv='refresh' content='1; URL=vaksin.php'> Berhasil ditambahkan";
+															
+					} else {
+					echo "Eksekusi Query gagal";
+					}
+		};
+	
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,8 +104,13 @@ https://templatemo.com/tm-547-real-dynamic
             <section class="row tm-mb-1">
                 <div class="col-12 text-center mx-auto tm-about-box">
                     <h2 class="tm-text-primary tm-my-1 tm-mb-5 tm-intro-text">Vaksinasi</h2>
-                    <button style="margin-bottom:20px" data-toggle="modal" data-target="#myModal" class="btn btn-info col-md-2"><span class="glyphicon glyphicon-plus"></span>Tambah</button>
-                    <table class="table table-bordered">
+                    <div class="card">
+                            <div class="card-body">
+                                <div class="d-sm-flex justify-content-between align-items-center">
+									<button style="margin-bottom" data-toggle="modal" data-target="#myModal" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span>Tambah</button>
+                                    <br>
+                                </div>                    
+                                <table class="table table-bordered">
 											<tr>
 												<th>No</th>
 												<th>Tempat</th>
@@ -107,11 +137,19 @@ https://templatemo.com/tm-547-real-dynamic
 													<td><?php echo $p['tanggal'] ?></td>
 													<td><?php echo $p['kuota'] ?></td>
 													<td><?php echo $p['daftar'] ?></td>
-                                                    <td>
-                                                        <a href="edit.php?id=<?php echo $d['id']; ?>">EDIT</a>
-                                                        <a href="hapus.php?id=<?php echo $d['id']; ?>">HAPUS</a>
-                                                    </td>
+                                                    <td><form action="vaksin.php" method="post" enctype="multipart/form-data" >
+														<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+														  Action
+														</button>
+														<div class="dropdown-menu">
+														  <input type="button" class="dropdown-item" data-toggle="modal" data-target="#ubah<?php echo $id_login ?>" value="Edit" \>
+														  <input type="submit" class="dropdown-item" name="hapus" value="Delete" \>
+														</div>
+													</form>
+													</td>
 												</tr>
+                                                
+                                                
 
 												<?php 
 											}
@@ -121,6 +159,8 @@ https://templatemo.com/tm-547-real-dynamic
                                     
                     
                 </div>
+
+                
             </section>
 
             
@@ -133,6 +173,43 @@ https://templatemo.com/tm-547-real-dynamic
             </footer>
         </div> <!-- container-fluid -->
     </div> <!-- tm-container -->
+
+    <div id="myModal" class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Tambah Vaksinasi</h4>
+						</div>
+						<div class="modal-body">
+							<form action="vaksin.php" method="post" enctype="multipart/form-data" >
+								<div class="form-group">
+									<label>Tempat</label>
+									<input name="tempat" type="text" class="form-control" placeholder="Username" required>
+								</div>
+								<div class="form-group">
+									<label>Tanggal Pelaksanaan</label>
+									<input name="tanggal" type="date" class="form-control" placeholder="Tanggal Pelaksanaan">
+								</div>
+								<div class="form-group">
+									<label>Kuota</label>
+									<input name="kuota" type="text" class="form-control" placeholder="Kuota">
+								</div>
+                                <div class="form-group">
+									<label>Link Pendaftaran</label>
+									<input name="daftar" type="text" class="form-control" placeholder="Link Pendaftaran">
+								</div>
+								 
+
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+								<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	
 
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
