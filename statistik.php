@@ -10,6 +10,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="fontawesome/css/all.min.css" rel="stylesheet" />
     <link href="css/templatemo-real-dynamic.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="Chartjs/Chart.min.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <!--
 
 TemplateMo 547 Real Dynamic
@@ -77,9 +79,51 @@ https://templatemo.com/tm-547-real-dynamic
             <section class="row tm-mb-1">
                 <div class="col-12 text-center mx-auto tm-about-box">
                     <h2 class="tm-text-primary tm-my-1 tm-mb-5 tm-intro-text">Data Kenaikan Covid di Indonesia</h2>
-                    <p>Morbi non tortor hendrerit, imperdiet sem suscipit, ultrices turpis. Nulla eleifend vestibulum eros id scelerisque. Aliquam fringilla in sem aliquam hendrerit. Maecenas congue euismod tortor, eget interdum purus imperdiet ac. Donec vestibulum dignissim nisl ac accumsan.</p>
-                </div>
-            </section>
+                    <?php
+                            include "koneksi.php";
+                            $covid = mysqli_query($conn,"select * from data_covid");
+                            while($row = mysqli_fetch_array($covid)){
+                                $provinsi[] = $row['provinsi'];
+                                
+                                $query = mysqli_query($conn,"SELECT * FROM data_covid where sembuh");
+                                $row = $query->fetch_array();
+                                $sembuh[] = $row['sembuh'];
+                            }
+                            ?>
+                            
+                                <div style="width: 800px;height: 800px">
+                                    <canvas id="myChart"></canvas>
+                                </div>
+
+
+                                <script>
+                                    var ctx = document.getElementById("myChart").getContext('2d');
+                                    var myChart = new Chart(ctx, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: <?php echo json_encode($provinsi); ?>,
+                                            datasets: [{
+                                                label: 'Grafik Penjualan',
+                                                data: <?php echo json_encode($sembuh); ?>,
+                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                borderColor: 'rgba(255,99,132,1)',
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        beginAtZero:true
+                                                    }
+                                                }]
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </body>
+                            </html>                </div>
+                                        </section>
 
             
             <footer class="row">
